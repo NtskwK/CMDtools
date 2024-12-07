@@ -1,14 +1,14 @@
 FROM pytorch/pytorch:2.5.1-cuda12.4-cudnn9-runtime
 
-MAINTAINER natsuu <natsukawa247@outlook.com>
+LABEL maintainer="natsuu <natsukawa247@outlook.com>"
 
 RUN cp -a /etc/apt/sources.list /etc/apt/sources.list.bak && \
     sed -i "s@http://.*archive.ubuntu.com@http://mirrors.huaweicloud.com@g" /etc/apt/sources.list && \
     sed -i "s@http://.*security.ubuntu.com@http://mirrors.huaweicloud.com@g" /etc/apt/sources.list
 
 
-RUN apt update -y || true && \
-    apt install -y vim git libgl1-mesa-glx libglib2.0-dev && \
+RUN apt-get -qq update -y || true && \
+    apt-get -qq install -y vim git libgl1-mesa-glx libglib2.0-dev make && \
     pip install jupyter -i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn && \
     jupyter notebook --generate-config && \
     sed -i '1i\ \
@@ -17,15 +17,35 @@ RUN apt update -y || true && \
     \nc.NotebookApp.port = 8888 \
     \nc.NotebookApp.token = "" \
     \nc.NotebookApp.allow_root = True \
+    \nc.TerminalManager.shell_command = ["/bin/bash"] \
     \nc.NotebookApp.notebook_dir = r"/"' /root/.jupyter/jupyter_notebook_config.py
 
-WORKDIR /workspace
-
+    # 安装插件
+    # 自动代码补全需要先在设置里打开，不然每次都要按`tab`键才能触发
+    RUN pip install jupyterlab-language-pack-zh-CN jupyterlab-lsp jedi-language-server xeus-python && \
+        # 交互绘图
+        pip install ipympl && \
+        pip install dask-labextension && \
+        # 单元格运行计时
+        pip install jupyterlab-execute-time && \
+        # 查看表格数据
+        pip install jupyterlab-spreadsheet && \
+        # 性能监视器
+        pip install nbresuse && \
+        pip install jupyterlab-system-monitor && \
+        # 更好的变量查看
+        pip install lckr-jupyterlab-variableinspector && \
+        # 处理地理数据
+        pip install jupyterlab-geojson && \
+        pip install eodag-labextension
+        
 # Run git clone https://github.com/ultralytics/yolov5
 # RUN pip install -r ./yolov5/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn
 
+WORKDIR /workspace
 # 声明需要暴露的端口
 EXPOSE 8888
 # 配置容器启动后执行的命令
+SHELL ["/bin/bash", "-c"]
 #ENTRYPOINT ["./entrypoint.sh"]
 ENTRYPOINT ["jupyter", "notebook", "--allow-root"]
