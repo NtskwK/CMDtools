@@ -1,0 +1,31 @@
+FROM pytorch/pytorch:2.5.1-cuda12.4-cudnn9-runtime
+
+MAINTAINER natsuu <natsukawa247@outlook.com>
+
+RUN cp -a /etc/apt/sources.list /etc/apt/sources.list.bak && \
+    sed -i "s@http://.*archive.ubuntu.com@http://mirrors.huaweicloud.com@g" /etc/apt/sources.list && \
+    sed -i "s@http://.*security.ubuntu.com@http://mirrors.huaweicloud.com@g" /etc/apt/sources.list
+
+
+RUN apt update -y || true && \
+    apt install -y vim git libgl1-mesa-glx libglib2.0-dev && \
+    pip install jupyter -i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn && \
+    jupyter notebook --generate-config && \
+    sed -i '1i\ \
+    \nc.NotebookApp.ip = "0.0.0.0" \
+    \nc.NotebookApp.open_browser = False \
+    \nc.NotebookApp.port = 8888 \
+    \nc.NotebookApp.token = "" \
+    \nc.NotebookApp.allow_root = True \
+    \nc.NotebookApp.notebook_dir = r"/"' /root/.jupyter/jupyter_notebook_config.py
+
+WORKDIR /workspace
+
+# Run git clone https://github.com/ultralytics/yolov5
+# RUN pip install -r ./yolov5/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn
+
+# 声明需要暴露的端口
+EXPOSE 8888
+# 配置容器启动后执行的命令
+#ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["jupyter", "notebook", "--allow-root"]
