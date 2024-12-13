@@ -1,0 +1,49 @@
+FROM continuumio/miniconda3
+
+LABEL maintainer="natsuu <natsukawa247@outlook.com>"
+
+RUN conda install jupyter -y --quiet && \ 
+    mkdir /opt/notebooks && \
+    /opt/conda/bin/jupyter notebook --generate-config && \
+    sed -i '1i\ \
+    \nc.NotebookApp.ip = "0.0.0.0" \
+    \nc.NotebookApp.open_browser = False \
+    \nc.NotebookApp.port = 8888 \
+    \nc.NotebookApp.token = "" \
+    \nc.NotebookApp.allow_root = True \
+    \nc.TerminalManager.shell_command = ["/bin/bash"] \
+    \nc.NotebookApp.notebook_dir = r"/"' /root/.jupyter/jupyter_notebook_config.py
+
+# 自动代码补全需要先在设置里打开，不然每次都要按`tab`键才能触发
+RUN pip install jupyterlab-language-pack-zh-CN jupyterlab-lsp jedi-language-server xeus-python && \
+    # 交互绘图
+    pip install ipympl && \
+    # 单元格运行计时
+    pip install jupyterlab-execute-time && \
+    # 查看表格数据
+    pip install jupyterlab-spreadsheet && \
+    # 性能监视器
+    pip install jupyterlab-system-monitor && \
+    # 更好的变量查看
+    pip install lckr-jupyterlab-variableinspector && \
+    # 处理地理数据
+    pip install jupyterlab-geojson && \
+    pip install eodag-labextension
+        
+# 这个文件居然不存在？
+# 不需要镜像可以注释掉
+# RUN cp -a /etc/apt/sources.list /etc/apt/sources.list.bak && \
+RUN touch /etc/apt/sources.list && \
+    # sed -i "s@http://.*archive.ubuntu.com@http://mirrors.huaweicloud.com@g" /etc/apt/sources.list && \
+    # sed -i "s@http://.*security.ubuntu.com@http://mirrors.huaweicloud.com@g" /etc/apt/sources.list && \
+    apt-get update && \
+    apt-get install -y git curl make gcc g++
+
+WORKDIR /workspace
+# 声明需要暴露的端口
+EXPOSE 8888
+# 配置容器启动后执行的命令
+SHELL ["/bin/bash", "-c"]
+#ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["jupyter", "lab", "--allow-root"]
+    
