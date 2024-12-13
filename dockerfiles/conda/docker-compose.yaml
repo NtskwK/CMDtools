@@ -1,0 +1,14 @@
+services:
+  jupyter:
+    image: kuron/miniconda3-jupyterlab:latest
+    ports:
+     - "8888:8888"
+    volumes:
+      - .:/workspace
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
