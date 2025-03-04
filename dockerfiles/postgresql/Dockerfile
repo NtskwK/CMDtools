@@ -1,5 +1,7 @@
 FROM ubuntu:20.04
-MAINTAINER kuron <natsukawa247@outlook.com>
+LABEL maintainer="kuron <natsukawa247@outlook.com>"
+LABEL description="PostgreSQL 9.5.25 with PostGIS 2.3.2"
+LABEL version="2.3.2"
 
 ENV POSTGRES_PASSWORD postgres
 ENV POSTGRES_HOST_AUTH_METHOD trust
