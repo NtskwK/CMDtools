@@ -1,11 +1,7 @@
 @echo off 
-echo æ­£åœ¨å…³é—­ç³»ç»Ÿä»£ç†ï¼Œè¯·ç¨å€™...
+echo ÕýÔÚ¹Ø±ÕÏµÍ³´úÀí£¬ÇëÉÔºò...
 echo=
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /f >nul 2>nul
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyServer /d "" /f >nul 2>nul
-
-for /l %%i in (3,-1,0) do (
-ping 127.1 -n 2 >nul
-echo. è„šæœ¬å°†åœ¨%%iåŽè‡ªåŠ¨å…³é—­æœ¬çª—å£ã€‚ã€‚
-)
-exit
+echo ÏµÍ³´úÀíÒÑ¹Ø±Õ£¬Çë°´ÈÎÒâ¼üÍË³ö±¾´°¿Ú...
+pause>nul

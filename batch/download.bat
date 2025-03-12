@@ -1,0 +1,1 @@
+curl -o HrAppStore.exe --progress-bar https://down-tencent.huorong.cn/appstore/HrAppStore-1.0.0.10.exe  
