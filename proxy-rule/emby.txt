@@ -1,0 +1,3 @@
+payload:
+  - DOMAIN,pilipiliultra.com
+  - DOMAIN,embyplus.org
