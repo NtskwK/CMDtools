@@ -2,7 +2,7 @@ FROM continuumio/miniconda3
 
 LABEL maintainer="natsuu <natsukawa247@outlook.com>"
 
-RUN conda install jupyter -y --quiet && \ 
+RUN conda install jupyter -y && \ 
     mkdir /opt/notebooks && \
     /opt/conda/bin/jupyter notebook --generate-config && \
     sed -i '1i\ \
@@ -34,8 +34,8 @@ RUN pip install jupyterlab-language-pack-zh-CN jupyterlab-lsp jedi-language-serv
 # 不需要镜像可以注释掉
 # RUN cp -a /etc/apt/sources.list /etc/apt/sources.list.bak && \
 RUN touch /etc/apt/sources.list && \
-    # sed -i "s@http://.*archive.ubuntu.com@http://mirrors.huaweicloud.com@g" /etc/apt/sources.list && \
-    # sed -i "s@http://.*security.ubuntu.com@http://mirrors.huaweicloud.com@g" /etc/apt/sources.list && \
+    sed -i "s@http://.*archive.ubuntu.com@http://mirrors.huaweicloud.com@g" /etc/apt/sources.list && \
+    sed -i "s@http://.*security.ubuntu.com@http://mirrors.huaweicloud.com@g" /etc/apt/sources.list && \
     apt-get update && \
     apt-get install -y git curl make gcc g++
 
