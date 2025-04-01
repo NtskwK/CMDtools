@@ -1,0 +1,1 @@
+nuitka --onefile --standalone --lto=yes  --enable-plugin=upx updater.py
