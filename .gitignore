@@ -1,2 +1,14 @@
+.venv
 *.pyd
 *.pyc
+
+*.build
+
+*.dblite
+
+*.log
+
+*.exe
+*.dll
+
+*-crash-report.xml

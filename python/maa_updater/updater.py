@@ -7,17 +7,64 @@ from json import loads
 from psutil import process_iter
 import sys
 from loguru import logger
+import winreg
 
-class config:
+class Config:
     work_dir = path.dirname(path.abspath(__file__))
     github_api_url = "http://api.github.com/repos/MaaAssistantArknights/MaaAssistantArknights/releases/latest"
-    github_proxy = "http://gh-proxy.natsuu.top/"
+    github_proxy = "https://gh-proxy.natsuu.top/"
     default_proxy = "http://127.0.0.1:7890"
     default_user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0"
 
 
-config = config()
+config = Config()
 
+def configure_logging():
+    """
+    配置 loguru 日志记录器。
+    如果发生错误，则将日志写入文件。
+    """
+    logger.remove()  # 移除默认的日志处理器
+    logger.add(
+        sys.stderr, level="INFO", format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{message}</level>"
+    )
+    logger.add(
+        "error.log",
+        level="ERROR",
+        format="<red>{time:YYYY-MM-DD HH:mm:ss}</red> | <level>{message}</level>",
+        rotation="1 MB",  # 日志文件大小超过 1 MB 时自动切分
+        retention="1 days",  # 保留 7 天的日志文件
+        backtrace=True,  # 捕获完整的回溯信息
+        diagnose=True,  # 提供详细的错误诊断信息
+        enqueue=True,  # 异步写入日志文件
+    )
+
+
+def get_system_proxy():
+    """
+    获取系统代理地址。
+    :return: 返回代理地址字符串或 None
+    """
+    try:
+        registry_key = winreg.OpenKey(
+            winreg.HKEY_CURRENT_USER,
+            r"Software\Microsoft\Windows\CurrentVersion\Internet Settings",
+            0,
+            winreg.KEY_READ,
+        )
+        proxy_enabled, _ = winreg.QueryValueEx(registry_key, "ProxyEnable")
+        proxy_server, _ = winreg.QueryValueEx(registry_key, "ProxyServer")
+        winreg.CloseKey(registry_key)
+
+        if proxy_enabled:
+            return proxy_server
+        else:
+            return None
+    except FileNotFoundError:
+        return None
+    except Exception as e:
+        print(f"获取系统代理时发生错误: {e}")
+        return None
 
 def get_http_manager(proxies=None):
     """
@@ -96,7 +143,7 @@ def get_latest_release_download_url(use_gitproxy=True, proxies=None):
     http = get_http_manager(proxies)
 
     try:
-        response = http.request("GET", config.github_api_url, timeout=10.0)
+        response = http.request("GET", config.github_api_url, timeout=3)
         if response.status == 200:
             release_data = loads(response.data.decode("utf-8"))
             for asset in release_data.get("assets", []):
@@ -128,27 +175,6 @@ def check_maa_running():
             exit(1)
 
 
-def configure_logging():
-    """
-    配置 loguru 日志记录器。
-    如果发生错误，则将日志写入文件。
-    """
-    logger.remove()  # 移除默认的日志处理器
-    logger.add(
-        sys.stderr, level="INFO", format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{message}</level>"
-    )
-    logger.add(
-        "error.log",
-        level="ERROR",
-        format="<red>{time:YYYY-MM-DD HH:mm:ss}</red> | <level>{message}</level>",
-        rotation="1 MB",  # 日志文件大小超过 1 MB 时自动切分
-        retention="1 days",  # 保留 7 天的日志文件
-        backtrace=True,  # 捕获完整的回溯信息
-        diagnose=True,  # 提供详细的错误诊断信息
-        enqueue=True,  # 异步写入日志文件
-    )
-
-
 def main():
     # 配置日志
     configure_logging()
@@ -159,30 +185,36 @@ def main():
     parser = ArgumentParser(description="MAA 更新工具")
     parser.add_argument("--no-overwrite", action="store_true", help="不覆盖已存在的文件")
     parser.add_argument(
-        "--no-gitproxy", action="store_true", help="是否禁用 GitHub 代理"
+        "-ghproxy", action="store_true", help="是否使用内置的 ghproxy 代理地址"
     )
     parser.add_argument(
-        "--proxy",
-        nargs="?",
-        const=config.default_proxy,
-        help="启用代理（可选指定代理地址）",
+        "--no-proxy",
+        action="store_true",
+        help='禁用代理\n如果没有启用系统代理则会尝试使用"http://127.0.0.1:7890"',
     )
     args = parser.parse_args()
 
     overwrite = not args.no_overwrite
-    use_proxy = not args.no_gitproxy
-    proxy = args.proxy
-    proxies = {"http": proxy, "https": proxy} if proxy else None
+    enable_ghproxy = args.ghproxy
+    enable_proxy = not args.no_proxy
+    if enable_proxy:
+        proxy = config.default_proxy
+        # 如果没有指定默认代理地址则使用系统代理
+        proxies = {"http": proxy, "https": proxy} if proxy else get_system_proxy()
+    else:
+        proxies = None
 
     logger.info(f"覆盖模式: {'启用' if overwrite else '禁用'}")
-    logger.info(f"GitHub 代理: {'禁用' if not use_proxy else '启用'}")
-    logger.info(f"代理设置: {'启用' if proxy else '禁用'}")
-    if proxy:
-        logger.info(f"代理地址: {proxy}")
+    logger.info(f"ghproxy 代理: {'禁用' if not enable_ghproxy else '启用'}")
+    logger.info(f"代理设置: {'禁用' if not enable_proxy else '启用'}")
+    if enable_proxy:
+        logger.info(f"代理地址: {str(proxies)}")
+    else:
+        logger.info("代理已禁用")
 
     # 获取最新 release 的下载链接
     download_url = get_latest_release_download_url(
-        use_gitproxy=use_proxy, proxies=proxies
+        use_gitproxy=enable_ghproxy, proxies=proxies
     )
     if download_url:
         logger.info(f"最新的下载链接: {download_url}")

@@ -1,1 +1,1 @@
-nuitka --onefile --standalone --lto=yes  --enable-plugin=upx updater.py
+nuitka --onefile --standalone --lto=yes --enable-plugin=upx --mingw64 updater.py
