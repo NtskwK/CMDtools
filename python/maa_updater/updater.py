@@ -9,8 +9,10 @@ import sys
 from loguru import logger
 import winreg
 
+
 class Config:
-    work_dir = path.dirname(path.abspath(__file__))
+    # 打包后__file__会指向Temp中的映射文件，所以使用 sys.path[0] 作为工作目录
+    work_dir = sys.path[0]
     github_api_url = "http://api.github.com/repos/MaaAssistantArknights/MaaAssistantArknights/releases/latest"
     github_proxy = "https://gh-proxy.natsuu.top/"
     default_proxy = "http://127.0.0.1:7890"
@@ -19,6 +21,7 @@ class Config:
 
 config = Config()
 
+
 def configure_logging():
     """
     配置 loguru 日志记录器。
@@ -26,7 +29,9 @@ def configure_logging():
     """
     logger.remove()  # 移除默认的日志处理器
     logger.add(
-        sys.stderr, level="INFO", format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{message}</level>"
+        sys.stderr,
+        level="INFO",
+        format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{message}</level>",
     )
     logger.add(
         "error.log",
@@ -65,6 +70,7 @@ def get_system_proxy():
     except Exception as e:
         print(f"获取系统代理时发生错误: {e}")
         return None
+
 
 def get_http_manager(proxies=None):
     """
@@ -156,7 +162,9 @@ def get_latest_release_download_url(use_gitproxy=True, proxies=None):
 
             logger.warning("未找到 ZIP 文件的下载链接。")
         else:
-            logger.error(f"获取 release 信息失败，状态码: {response.status}")
+            logger.error(
+                f"获取 release 信息失败，状态码: {response.status}\n{config.github_api_url}"
+            )
     except exceptions.HTTPError as e:
         logger.exception(f"获取 release 信息时发生网络错误: {e}")
     except ValueError as e:
@@ -183,9 +191,11 @@ def main():
     check_maa_running()
 
     parser = ArgumentParser(description="MAA 更新工具")
-    parser.add_argument("--no-overwrite", action="store_true", help="不覆盖已存在的文件")
     parser.add_argument(
-        "-ghproxy", action="store_true", help="是否使用内置的 ghproxy 代理地址"
+        "--ghproxy", action="store_true", help="是否使用内置的 ghproxy 代理地址"
+    )
+    parser.add_argument(
+        "--no-overwrite", action="store_true", help="不覆盖已存在的文件"
     )
     parser.add_argument(
         "--no-proxy",
