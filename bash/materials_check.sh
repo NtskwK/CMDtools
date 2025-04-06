@@ -8,6 +8,9 @@ sudo apt-get update
 
 sudo apt-get install ca-certificates curl unzip
 
+# 安装常用工具
+sudo apt-get install htop
+
 # Add Docker's official GPG key:
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
