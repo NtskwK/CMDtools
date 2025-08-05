@@ -3,13 +3,15 @@
 # 请求sudo权限
 sudo -v
 
+sudo cp -a /etc/apt/sources.list /etc/apt/sources.list.bak && \
+sudo sed -i "s@http://.*archive.ubuntu.com@http://mirrors.huaweicloud.com@g" /etc/apt/sources.list && \
+sudo sed -i "s@http://.*security.ubuntu.com@http://mirrors.huaweicloud.com@g" /etc/apt/sources.list
+
 # 更新软件源
 sudo apt-get update
 
-sudo apt-get install ca-certificates curl unzip
-
 # 安装常用工具
-sudo apt-get install htop
+sudo apt-get install htop ca-certificates curl unzip net-tools p7zip-full wget openssl ffmpeg perl-tk git fontconfig xfonts-utils ttf-mscorefonts-installer -y
 
 # Add Docker's official GPG key:
 sudo install -m 0755 -d /etc/apt/keyrings
@@ -33,16 +35,16 @@ echo \
 sudo apt-get update
 
 # 安装C/C++工具链相关（gcc, g++）
-sudo apt install -y build-essential clang libssl-dev cmake
-
-# 安装git
-sudo apt install -y git
+sudo apt install build-essential clang libssl-dev cmake make gcc g++ -y
 
 # 安装OpenJDK 11 headless
-sudo apt install -y openjdk-11-jre-headless
+sudo apt install openjdk-11-jre-headless -y
+
+# 安装golang
+sudo apt install golang -y
 
 # 安装docker
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
 # 安装nvidia-container-toolkit
 sudo apt-get install -y nvidia-container-toolkit
@@ -53,19 +55,25 @@ sudo systemctl restart docker
 sudo apt-get install fish
 
 # 安装rust
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 # 安装nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
+curl -o- https://gh-proxy.natsuu.top/https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
+source ~/.bashrc
+
+nvm install 22
+
 # 安装miniconda
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash ~/Miniconda3-latest-Linux-x86_64.sh
+bash ./Miniconda3-latest-Linux-x86_64.sh -b
 
 source ~/.bashrc
+
+conda config --set auto_activate_base false
 
 # 停止sudo权限刷新进程
 kill %1
