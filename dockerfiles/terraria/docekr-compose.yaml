@@ -1,0 +1,14 @@
+services:
+  terraria:
+    image: mark2dot0/tshock:latest
+    container_name: terraria
+    restart: unless-stopped
+    volumes:
+      - "./tshock/:/tshock"
+      - "./worlds:/worlds"
+      - "./plugins:/plugins"
+      - "/etc/localtime:/etc/localtime:ro"
+    ports:
+      - "7777:7777"
+      - "7878:7878" # 如果您不使用 REST 服务，可以删除此项
+    command: -world /worlds/my_world.wld
