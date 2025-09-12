@@ -1,6 +1,6 @@
 # CMDtools
 
-Some script tools for my own use
+Some script tools for my own use.
 
 ## License
 
