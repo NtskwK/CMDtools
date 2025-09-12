@@ -1,1 +1,3 @@
 nuitka --onefile --standalone --lto=yes --enable-plugin=upx --mingw64 updater.py
+
+pause

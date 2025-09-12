@@ -134,7 +134,7 @@ def extract_zip(zip_path, extract_to, overwrite=False):
                 break
             zip_ref.extract(file, extract_to)
 
-    logger.info(f"文件已解压！")
+    logger.info("文件已解压！")
 
 
 def get_latest_release_download_url(use_gitproxy=True, proxies=None):
