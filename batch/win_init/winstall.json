@@ -1,0 +1,247 @@
+{
+    "$schema": "https://aka.ms/winget-packages.schema.1.0.json",
+    "WinGetVersion": "0.3.11201",
+    "Sources": [
+        {
+            "Packages": [
+                {
+                    "Id": "JGraph.Draw"
+                },
+                {
+                    "Id": "CoreyButler.NVMforWindows"
+                },
+                {
+                    "Id": "7zip.7zip"
+                },
+                {
+                    "Id": "LibNyanpasu.clash-nyanpasu"
+                },
+                {
+                    "Id": "Docker.DockerDesktop"
+                },
+                {
+                    "Id": "voidtools.Everything"
+                },
+                {
+                    "Id": "Git.Git"
+                },
+                {
+                    "Id": "HeidiSQL.HeidiSQL"
+                },
+                {
+                    "Id": "Mozilla.Firefox.ESR.zh-TW"
+                },
+                {
+                    "Id": "Daum.PotPlayer"
+                },
+                {
+                    "Id": "Waterfox.Waterfox"
+                },
+                {
+                    "Id": "Tencent.TencentMeeting"
+                },
+                {
+                    "Id": "RARLab.WinRAR"
+                },
+                {
+                    "Id": "DigitalScholar.Zotero"
+                },
+                {
+                    "Id": "Pylogmon.pot"
+                },
+                {
+                    "Id": "LocalSend.LocalSend"
+                },
+                {
+                    "Id": "SoftDeluxe.FreeDownloadManager"
+                },
+                {
+                    "Id": "Microsoft.VCRedist.2010.x64"
+                },
+                {
+                    "Id": "Microsoft.CLRTypesSQLServer.2019"
+                },
+                {
+                    "Id": "Microsoft.VCRedist.2008.x64"
+                },
+                {
+                    "Id": "Google.Chrome"
+                },
+                {
+                    "Id": "EclipseAdoptium.Temurin.17.JDK"
+                },
+                {
+                    "Id": "Kitware.CMake"
+                },
+                {
+                    "Id": "Starship.Starship"
+                },
+                {
+                    "Id": "Microsoft.VisualStudioCode"
+                },
+                {
+                    "Id": "GoLang.Go"
+                },
+                {
+                    "Id": "HandBrake.HandBrake"
+                },
+                {
+                    "Id": "JetBrains.IntelliJIDEA.Ultimate"
+                },
+                {
+                    "Id": "CodecGuide.K-LiteCodecPack.Full"
+                },
+                {
+                    "Id": "LLVM.LLVM"
+                },
+                {
+                    "Id": "GnuWin32.Make"
+                },
+                {
+                    "Id": "Microsoft.Edge"
+                },
+                {
+                    "Id": "OBSProject.OBSStudio"
+                },
+                {
+                    "Id": "JetBrains.PyCharm.Professional"
+                },
+                {
+                    "Id": "Tencent.QQ.NT"
+                },
+                {
+                    "Id": "Valve.Steam"
+                },
+                {
+                    "Id": "Microsoft.VisualStudio.2022.Community"
+                },
+                {
+                    "Id": "chrisant996.Clink"
+                },
+                {
+                    "Id": "Microsoft.DotNet.DesktopRuntime.6"
+                },
+                {
+                    "Id": "Microsoft.DotNet.DesktopRuntime.3_1"
+                },
+                {
+                    "Id": "Microsoft.VCRedist.2013.x86"
+                },
+                {
+                    "Id": "Microsoft.VCRedist.2015+.x86"
+                },
+                {
+                    "Id": "Microsoft.VCRedist.2005.x86"
+                },
+                {
+                    "Id": "Python.Launcher"
+                },
+                {
+                    "Id": "Microsoft.VCRedist.2008.x86"
+                },
+                {
+                    "Id": "Microsoft.VCRedist.2012.x64"
+                },
+                {
+                    "Id": "Texmaker.Texmaker"
+                },
+                {
+                    "Id": "Microsoft.VCRedist.2010.x86"
+                },
+                {
+                    "Id": "Microsoft.VCRedist.2012.x86"
+                },
+                {
+                    "Id": "Microsoft.VCRedist.2015+.x64"
+                },
+                {
+                    "Id": "Microsoft.DotNet.DesktopRuntime.8"
+                },
+                {
+                    "Id": "Microsoft.VCRedist.2013.x64"
+                },
+                {
+                    "Id": "Microsoft.PowerShell"
+                },
+                {
+                    "Id": "Microsoft.DotNet.SDK.3_1"
+                },
+                {
+                    "Id": "Termius.Termius"
+                },
+                {
+                    "Id": "PicGo.PicGo.Beta"
+                },
+                {
+                    "Id": "Anaconda.Miniconda3"
+                },
+                {
+                    "Id": "JanDeDobbeleer.OhMyPosh"
+                },
+                {
+                    "Id": "Rustlang.Rustup"
+                },
+                {
+                    "Id": "JetBrains.Toolbox"
+                },
+                {
+                    "Id": "WinMerge.WinMerge"
+                },
+                {
+                    "Id": "aristocratos.btop4win"
+                },
+                {
+                    "Id": "babalae.BetterGI"
+                },
+                {
+                    "Id": "huanghongxun.HelloMinecraftLauncher"
+                },
+                {
+                    "Id": "Ollama.Ollama"
+                },
+                {
+                    "Id": "Python.Python.3.10"
+                },
+                {
+                    "Id": "Microsoft.PowerToys"
+                },
+                {
+                    "Id": "Python.Python.3.8"
+                },
+                {
+                    "Id": "Canonical.Ubuntu.2004"
+                },
+                {
+                    "Id": "Microsoft.AppInstaller"
+                },
+                {
+                    "Id": "Microsoft.UI.Xaml.2.7"
+                },
+                {
+                    "Id": "Microsoft.UI.Xaml.2.7"
+                },
+                {
+                    "Id": "Microsoft.UI.Xaml.2.8"
+                },
+                {
+                    "Id": "Microsoft.UI.Xaml.2.8"
+                },
+                {
+                    "Id": "Microsoft.VCLibs.Desktop.14"
+                },
+                {
+                    "Id": "Microsoft.VCLibs.Desktop.14"
+                },
+                {
+                    "Id": "Microsoft.WindowsTerminal"
+                }
+            ],
+            "SourceDetails": {
+                "Argument": "https://mirrors.ustc.edu.cn/winget-source",
+                "Identifier": "Microsoft.Winget.Source_8wekyb3d8bbwe",
+                "Name": "winget",
+                "Type": "Microsoft.PreIndexed.Package"
+            }
+        }
+    ]
+}

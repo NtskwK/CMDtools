@@ -1,0 +1,1 @@
+winget import --import-file "winstall.json" 
